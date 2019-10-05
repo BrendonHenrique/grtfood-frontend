@@ -52,19 +52,18 @@ class Api {
     setCardapio(cardapio) {
         return this.jrpc.call('setCardapio', { novoCardapio: cardapio });
     }
-    createPedido(payload) {
 
     createPedido(payload){
         const { userId, items, multiplos, obs  } = payload 
         return this.jrpc.call('createPedido',
-            {
-                "userId": userId,
-                "pedido": {
-                    "items": items,
-                    "multiplos": multiplos
-                },
-                "obs": obs
-            })
+        {
+            "userId": userId,
+            "pedido": {
+                "items": items,
+                "multiplos": multiplos
+            },
+            "obs": obs
+        })
     }
 
     removerPedido(payload) {

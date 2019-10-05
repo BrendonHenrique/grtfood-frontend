@@ -2,7 +2,9 @@
   <q-layout view="lHh Lpr lFf">
 
     <!-- Header -->
-    <grtfood-header />
+    <grtfood-header>
+      Grt Food
+    </grtfood-header>
     <!--  -->
     
     <!-- Menu lateral com cardapio -->

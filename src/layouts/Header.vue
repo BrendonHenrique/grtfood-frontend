@@ -6,7 +6,9 @@
           <q-img src="https://image.flaticon.com/icons/svg/926/926255.svg" style="width: 60px;" />
         </q-btn>
         <span style="font-family: 'Vibes', cursive;font-size:35px;margin-left:35px;">
-          Grt Food
+          <slot>
+            
+          </slot>
         </span>
       </q-toolbar-title>
       <q-space />
