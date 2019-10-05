@@ -11,22 +11,27 @@
             </span>
           </q-banner>
           
-          <q-scroll-area>
-            <q-list dense bordered padding class="rounded-borders" 
-            clickable v-for="(pedido,idx) in pedidos" :key="idx">
+          <div>
+
+            <q-scroll-area style="height: 100vh; width: 100%;">
+              <q-list dense bordered padding class="rounded-borders" 
+              clickable v-for="(pedido,idx) in pedidos" :key="idx">
+            
+                <q-item clickable v-ripple @click="mostrarPedido(pedido)">
+                  <q-item-section>
+                    <span style="font-family: 'Dosis', sans-serif;font-size:25px;">
+                      {{pedido.usuario}}
+                    </span>
+                  </q-item-section>
+                  <q-space />
+                  <q-btn round icon="delete" @click.stop="removerPedido(pedido)"/>
+                </q-item>
+            
+              </q-list>
+            </q-scroll-area>
           
-              <q-item clickable v-ripple @click="mostrarPedido(pedido)">
-                <q-item-section>
-                  <span style="font-family: 'Dosis', sans-serif;font-size:25px;">
-                    {{pedido.usuario}}
-                  </span>
-                </q-item-section>
-                <q-space />
-                <q-btn round icon="delete" @click.stop="removerPedido(pedido)"/>
-              </q-item>
-          
-            </q-list>
-          </q-scroll-area>
+          </div>
+        
         </q-card>
       </q-page>
       <!--  -->

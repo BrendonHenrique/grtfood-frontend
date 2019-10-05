@@ -1,8 +1,10 @@
 <template>
   <div>
     <!-- Menu lateral do cardapio -->
-    <q-drawer side="right" style="text-align:center;" v-model="leftDrawerOpen" show-if-above bordered 
-    :width="400" content-class="bg-grey-2">
+    <q-drawer side="right" style="text-align:center;" 
+    @hide="$emit('updateParentLeftDrawerOpen',childLeftDrawerOpen)"
+    v-model="childLeftDrawerOpen" show-if-above bordered 
+    :width="250" content-class="bg-grey-2">
 
       <grtfood-cardapio-header />
 
@@ -30,11 +32,12 @@
   import grtfoodStoreController from '../controllers/grtfoodStoreController'
 
   export default {
+    props:['leftDrawerOpen'],
     data() {
       return {
-        leftDrawerOpen: true,
         cardapio: {},
         fazerPedido: false,
+        childLeftDrawerOpen: this.leftDrawerOpen
       }
     },
     mounted() {
@@ -57,8 +60,12 @@
       'grtfood-criador-de-pedidos': require('./grtfoodCriadorDePedidos').default,
       'grtfood-menu-de-opcoes': require('./grtfoodMenuDeOpcoes').default,
       'grtfood-cardapio-header': require('./grtfoodCardapioHeader').default
+    },
+    watch:{
+      leftDrawerOpen(newValue){
+        this.childLeftDrawerOpen = newValue
+      }
     }
-
   }
 
 </script>

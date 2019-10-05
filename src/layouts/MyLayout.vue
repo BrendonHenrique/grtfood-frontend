@@ -4,11 +4,14 @@
     <!-- Header -->
     <grtfood-header>
       Grt Food
+      <template v-slot:drawerButton>
+        <q-btn @click="leftDrawerOpen= !leftDrawerOpen" icon="menu" round glossy/>
+      </template>
     </grtfood-header>
     <!--  -->
     
     <!-- Menu lateral com cardapio -->
-    <grtfood-menu-cardapio />
+    <grtfood-menu-cardapio :leftDrawerOpen="leftDrawerOpen" @updateParentLeftDrawerOpen="updateParentLeftDrawerOpen"/>
     <!--  -->
 
     <!-- lista com os pedidos -->
@@ -21,10 +24,20 @@
 <script>
   export default {
     name: 'MyLayout',
+    data(){
+      return{
+        leftDrawerOpen: true
+      }
+    },
     components: {
       'grtfood-header': require('./Header').default,
       'grtfood-menu-cardapio': require('../components/grtfoodCardapio').default,
       'grtfood-lista-de-pedidos': require('../components/grtfoodListaDePedidos').default,
+    },
+    methods:{
+      updateParentLeftDrawerOpen(event){
+        this.leftDrawerOpen = event
+      }
     }
   }
 </script>

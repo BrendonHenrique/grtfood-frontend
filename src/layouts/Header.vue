@@ -12,6 +12,9 @@
         </span>
       </q-toolbar-title>
       <q-space />
+      <slot name="drawerButton">
+          
+      </slot>
     </q-toolbar>
   </q-header>
 </template>
