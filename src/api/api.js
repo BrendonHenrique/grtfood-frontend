@@ -66,8 +66,8 @@ class Api {
         })
     }
 
-    removerPedido(payload) {
-        console.log(payload)
+    removerPedido(pedidoId) {
+        return this.jrpc.call('deletePedido',pedidoId);
     }
 
     getPedidos(){

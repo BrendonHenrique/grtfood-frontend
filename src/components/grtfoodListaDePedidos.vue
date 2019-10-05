@@ -76,12 +76,10 @@
       </q-dialog>
       <!--  -->
 
-
       <!-- Modais de avisos -->
       <sweet-modal icon="success" ref="removidoComSucesso">
         Pedido removido com sucesso!
       </sweet-modal>
-
       <sweet-modal icon="warning" ref="naoRemovido">
         Pedido de remoção cancelado!
       </sweet-modal>
@@ -115,7 +113,8 @@
         Object.assign(this.pedidoSelecionado, {
           items:selecionado.pedido.items,
           multiplos:selecionado.pedido.multiplos,
-          usuario: selecionado.usuario
+          usuario: selecionado.usuario,
+          id: selecionado.id
         });
       },
       mostrarPedido(selecionado) {
@@ -135,10 +134,11 @@
           },
           persistent: true
         }).onOk(() => {
-          API.connect().then( api => {
-            api.removerPedido(this.pedidoSelecionado)
-          });
-          this.$refs.removidoComSucesso.open()
+          if(API.iniciado){
+            API.removerPedido(this.pedidoSelecionado.id).then( () => { 
+              this.$refs.removidoComSucesso.open()
+            })
+          }
         }).onCancel(() => {
           this.$refs.naoRemovido.open()
         });

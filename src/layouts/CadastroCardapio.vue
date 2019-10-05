@@ -88,7 +88,7 @@
           <q-separator dark />
 
           <q-card-actions>
-            <q-btn flat @click="atualizarCardapio">Criar/Atualizar Cardapio</q-btn>
+            <q-btn class="bg-primary text-white" @click="atualizarCardapio">Criar/Atualizar Cardapio</q-btn>
           </q-card-actions>
         </q-card>
       </div>
@@ -148,3 +148,6 @@ export default {
   }
 };
 </script>
+<style lang="stylus">
+  @import url('https://fonts.googleapis.com/css?family=Dosis|Vibes&display=swap');
+</style>
