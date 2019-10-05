@@ -97,7 +97,7 @@
           <q-separator dark />
 
           <q-card-actions>
-            <q-btn flat>Criar/Atualizar Cardapio</q-btn>
+            <q-btn flat @click="atualizarCardapio">Criar/Atualizar Cardapio</q-btn>
           </q-card-actions>
         </q-card>
       </div>
@@ -145,6 +145,11 @@ export default {
     },
     removeSubItem(multiplo, idx) {
       this.cardapio.multiplos[multiplo].splice(idx, 1);
+    },
+    atualizarCardapio() {
+      API.connect().then(api => {
+        api.setCardapio(this.cardapio);
+      });
     }
   }
 };
