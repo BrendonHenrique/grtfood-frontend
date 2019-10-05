@@ -59,19 +59,24 @@
                     />
                   </q-item-section>
                 </q-item>
-                <q-item tag="label" v-ripple v-for="op in opcoes" :inset-level="1" :key="op">
+                <q-item tag="label" v-ripple v-for="(op,idx) in opcoes" :inset-level="1" :key="op">
                   <q-item-section>
                     <q-item-label>{{op}}</q-item-label>
                   </q-item-section>
                   <q-item-section side top>
-                    <q-btn round color="deep-orange" icon="delete_outline" />
+                    <q-btn
+                      round
+                      color="deep-orange"
+                      icon="delete_outline"
+                      @click="removeSubItem(multiplo,idx)"
+                    />
                   </q-item-section>
                 </q-item>
                 <q-item :inset-level="1" :key="multiplo">
                   <q-item-section>
                     <q-input outlined v-model="subItem" label="Adicionar Subitem">
                       <template v-slot:after>
-                        <q-btn round icon="add" />
+                        <q-btn round icon="add" @click="addSubItem(multiplo)" />
                       </template>
                     </q-input>
                   </q-item-section>
@@ -129,9 +134,17 @@ export default {
     },
     addMultiplo() {
       this.$set(this.cardapio.multiplos, this.multiploTxt, []);
+      this.multiploTxt = "";
     },
     removeMultiplo(multiplo) {
       this.$delete(this.cardapio.multiplos, multiplo);
+    },
+    addSubItem(multiplo) {
+      this.cardapio.multiplos[multiplo].push(this.subItem);
+      this.subItem = "";
+    },
+    removeSubItem(multiplo, idx) {
+      this.cardapio.multiplos[multiplo].splice(idx, 1);
     }
   }
 };
