@@ -54,12 +54,8 @@ class Api {
     }
     createPedido(payload) {
 
-<<<<<<< HEAD
     createPedido(payload){
         const { userId, items, multiplos, obs  } = payload 
-=======
-        const { userId, items, multiplos, obs } = payload
->>>>>>> 5bbdc94cdb21ac09adf95651e2126209e8f7eef6
         return this.jrpc.call('createPedido',
             {
                 "userId": userId,
@@ -73,14 +69,10 @@ class Api {
 
     removerPedido(payload) {
         console.log(payload)
-<<<<<<< HEAD
     }
 
     getPedidos(){
         return this.jrpc.call('getPedidos',[]);
-=======
-
->>>>>>> 5bbdc94cdb21ac09adf95651e2126209e8f7eef6
     }
 
 
