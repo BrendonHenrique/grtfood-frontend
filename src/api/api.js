@@ -5,70 +5,82 @@ let jrpc;
 let iniciado = false;
 
 class Api {
-    constructor(){
-     
-        if(!socket && !jrpc){
-            jrpc =  new simple_jsonrpc()
-            socket =  new WebSocket("ws://0.0.0.0:8081/websocket")
+    constructor() {
+
+        if (!socket && !jrpc) {
+            jrpc = new simple_jsonrpc()
+            socket = new WebSocket("ws://0.0.0.0:8081/websocket")
         }
-     
+
         this.iniciado = iniciado;
         this.jrpc = jrpc;
         this.socket = socket;
     }
 
-    connect(){
-        return new Promise((res,rej)=>{
+    connect() {
+        return new Promise((res, rej) => {
 
-            if(this.iniciado) {
-                res(this); 
+            if (this.iniciado) {
+                res(this);
                 return;
             }
 
             this.socket.onmessage = event => this.jrpc.messageHandler(event.data);
             this.jrpc.toStream = _msg => this.socket.send(_msg)
-            this.socket.onerror = error => this.onDisconnect() 
-            this.socket.onclose = event => this.onDisconnect() 
-            this.onDisconnect = () =>  rej()
+            this.socket.onerror = error => this.onDisconnect()
+            this.socket.onclose = event => this.onDisconnect()
+            this.onDisconnect = () => rej()
             this.socket.onopen = () => {
                 iniciado = this.iniciado = true;
                 res(this);
             }
-    
-            this.jrpc.on('setEstadoCardapio', function(response){
+
+            this.jrpc.on('setEstadoCardapio', function (response) {
                 grtfoodStoreController.updatePossibilidadeDefazerPedidos(response)
             });
-        
+
         });
     }
-    
-    getUsuarios(){
-        return this.jrpc.call('getUsuarios',[]);
+
+    getUsuarios() {
+        return this.jrpc.call('getUsuarios', []);
     }
 
-    getCardapio(){
-        return this.jrpc.call('getCardapio',{});
+    getCardapio() {
+        return this.jrpc.call('getCardapio', {});
     }
+    setCardapio(cardapio) {
+        return this.jrpc.call('setCardapio', { novoCardapio: cardapio });
+    }
+    createPedido(payload) {
 
+<<<<<<< HEAD
     createPedido(payload){
         const { userId, items, multiplos, obs  } = payload 
+=======
+        const { userId, items, multiplos, obs } = payload
+>>>>>>> 5bbdc94cdb21ac09adf95651e2126209e8f7eef6
         return this.jrpc.call('createPedido',
-        {
-            "userId":userId, 
-            "pedido":{
-                "items": items, 
-                "multiplos": multiplos
-            },
-            "obs":obs
-        }) 
+            {
+                "userId": userId,
+                "pedido": {
+                    "items": items,
+                    "multiplos": multiplos
+                },
+                "obs": obs
+            })
     }
 
-    removerPedido(payload){
+    removerPedido(payload) {
         console.log(payload)
+<<<<<<< HEAD
     }
 
     getPedidos(){
         return this.jrpc.call('getPedidos',[]);
+=======
+
+>>>>>>> 5bbdc94cdb21ac09adf95651e2126209e8f7eef6
     }
 
 

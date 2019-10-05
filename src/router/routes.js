@@ -3,6 +3,10 @@ const routes = [
   {
     path: '/',
     component: () => import('layouts/MyLayout.vue')
+  },
+  {
+    path: '/cardapio-manager',
+    component: () => import('layouts/CadastroCardapio.vue')
   }
 ]
 
