@@ -111,7 +111,7 @@
     mounted(){
       setTimeout( () => {
         this.getPedidos()
-      },1000)
+      },3000)
     },
     methods:{
       selecionarPedido(selecionado){
