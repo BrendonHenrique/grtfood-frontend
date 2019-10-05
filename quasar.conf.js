@@ -42,7 +42,16 @@ module.exports = function (ctx) {
       //            (not treeshaking Quasar; biggest bundle size; convenient)
       all: 'auto',
 
-      components: [],
+      components: [
+        'QHeader',
+        'QToolbar',
+        'QImg',
+        'QToolbarTitle',
+        'QBtn',
+        'QSpace',
+        'QItemLabel',
+        'QForm',
+      ],
       directives: [],
 
       // Quasar plugins
@@ -50,7 +59,7 @@ module.exports = function (ctx) {
         'Dialog'
       ]
     },
-
+    
     // https://quasar.dev/quasar-cli/cli-documentation/supporting-ie
     supportIE: false,
 
