@@ -1,0 +1,138 @@
+<template>
+  <q-layout view="hHh lpR fFf">
+    <q-header elevated class="bg-primary text-white">
+      <q-toolbar>
+        <q-btn dense flat round icon="menu" @click="left = !left" />
+
+        <q-toolbar-title>
+          <q-avatar>
+            <img src="https://cdn.quasar.dev/logo/svg/quasar-logo.svg" />
+          </q-avatar>Titlu
+        </q-toolbar-title>
+      </q-toolbar>
+    </q-header>
+
+    <q-drawer show-if-above v-model="left" side="left" bordered>
+      <!-- drawer content -->
+    </q-drawer>
+
+    <q-page-container>
+      <div class="container">
+        <q-card class="my-card">
+          <q-card-section>
+            <div class="text-h6">Cardápio do dia</div>
+            <div class="text-subtitle2">o que vamos comer hoje?</div>
+          </q-card-section>
+
+          <q-card-section>
+            <q-list class>
+              <q-item tag="label" v-ripple v-for="(item,idx) in cardapio.items" :key="item">
+                <q-item-section>
+                  <q-item-label>{{item}}</q-item-label>
+                </q-item-section>
+                <q-item-section side top>
+                  <q-btn round color="deep-orange" icon="delete_outline" @click="removeItem(idx)" />
+                </q-item-section>
+              </q-item>
+              <q-item>
+                <q-item-section>
+                  <q-input outlined v-model="item" label="Adicionar Item">
+                    <template v-slot:after>
+                      <q-btn round icon="add" @click="addItem()" />
+                    </template>
+                  </q-input>
+                </q-item-section>
+              </q-item>
+            </q-list>
+            <q-list class>
+              <template v-for="( opcoes,multiplo) in cardapio.multiplos">
+                <q-item tag="label" v-ripple :key="multiplo+'add'">
+                  <q-item-section>
+                    <q-item-label>{{multiplo}}</q-item-label>
+                  </q-item-section>
+                  <q-item-section side top>
+                    <q-btn
+                      round
+                      @click="removeMultiplo(multiplo)"
+                      color="deep-orange"
+                      icon="delete_outline"
+                    />
+                  </q-item-section>
+                </q-item>
+                <q-item tag="label" v-ripple v-for="op in opcoes" :inset-level="1" :key="op">
+                  <q-item-section>
+                    <q-item-label>{{op}}</q-item-label>
+                  </q-item-section>
+                  <q-item-section side top>
+                    <q-btn round color="deep-orange" icon="delete_outline" />
+                  </q-item-section>
+                </q-item>
+                <q-item :inset-level="1" :key="multiplo">
+                  <q-item-section>
+                    <q-input outlined v-model="subItem" label="Adicionar Subitem">
+                      <template v-slot:after>
+                        <q-btn round icon="add" />
+                      </template>
+                    </q-input>
+                  </q-item-section>
+                </q-item>
+              </template>
+              <q-item>
+                <q-item-section>
+                  <q-input outlined v-model="multiploTxt" label="Adicionar Item multiplo">
+                    <template v-slot:after>
+                      <q-btn round icon="add" @click="addMultiplo()" />
+                    </template>
+                  </q-input>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-card-section>
+
+          <q-separator dark />
+
+          <q-card-actions>
+            <q-btn flat>Criar/Atualizar Cardapio</q-btn>
+          </q-card-actions>
+        </q-card>
+      </div>
+    </q-page-container>
+  </q-layout>
+</template>
+
+<script>
+import API from "../api/api";
+export default {
+  data() {
+    return {
+      left: false,
+      item: "",
+      multiploTxt: "",
+      subItem: "",
+
+      cardapio: {}
+    };
+  },
+  mounted() {
+    API.connect().then(api => {
+      api.getCardapio().then(cardapio => (this.cardapio = cardapio));
+    });
+  },
+  methods: {
+    addItem() {
+      this.cardapio.items.push(this.item);
+      this.item = "";
+    },
+    removeItem(indice) {
+      this.cardapio.items.splice(indice, 1);
+      this.item = "";
+    },
+    addMultiplo() {
+      this.$set(this.cardapio.multiplos, this.multiploTxt, []);
+    },
+    removeMultiplo(multiplo) {
+      this.$delete(this.cardapio.multiplos, multiplo);
+    }
+  }
+};
+</script>
