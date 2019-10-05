@@ -18,7 +18,7 @@
               <q-item clickable v-ripple @click="mostrarPedido(pedido)">
                 <q-item-section>
                   <span style="font-family: 'Dosis', sans-serif;font-size:25px;">
-                    {{pedido.usuario.label}}
+                    {{pedido.usuario}}
                   </span>
                 </q-item-section>
                 <q-space />
@@ -65,13 +65,6 @@
                 </q-item-section>
               </q-item>
             </q-list>
-            
-            <q-item clickable v-ripple>
-              <q-item-section class="bg-grey-4 shadow-2">
-                  <span class="q-mb-sm text-grey-9 text-center" style="font-family: 'Dosis', sans-serif;font-size:20px;">Observação</span>
-                  <q-input dense style="height:5rem;" v-model="pedidoSelecionado.observacao" filled type="textarea" />
-              </q-item-section>
-            </q-item>
           
           </q-card-section>
           
@@ -113,23 +106,24 @@
       }
     },
     mounted(){
-      this.pedidos = grtfoodStoreController.getPedidos()
+      setTimeout( () => {
+        this.getPedidos()
+      },1000)
     },
     methods:{
-      selecionarPedido(pedido){
+      selecionarPedido(selecionado){
         Object.assign(this.pedidoSelecionado, {
-          items:pedido.items,
-          multiplos:pedido.multiplos,
-          observacao:pedido.obs,
-          usuario: pedido.usuario.label
+          items:selecionado.pedido.items,
+          multiplos:selecionado.pedido.multiplos,
+          usuario: selecionado.usuario
         });
       },
-      mostrarPedido(pedido) {
-        this.selecionarPedido(pedido)
+      mostrarPedido(selecionado) {
+        this.selecionarPedido(selecionado)
         this.mostrandoPedido = true
       },
-      removerPedido(pedido){
-        this.selecionarPedido(pedido)
+      removerPedido(selecionado){
+        this.selecionarPedido(selecionado)
         this.$q.dialog({
           title: 'Confirmar',
           message: `${this.pedidoSelecionado.usuario} você gostaria de remover seu pedido ?`,
@@ -141,29 +135,35 @@
           },
           persistent: true
         }).onOk(() => {
-          
-          API.connect().then((api) => {
-            api.getCardapio().then(cardapio => {
-          
-              // grtfoodStoreController.updateCardapio(cardapio)
-              // this.cardapio = grtfoodStoreController.getCardapio()
-          
-            })
+          API.connect().then( api => {
+            api.removerPedido(this.pedidoSelecionado)
           });
-          
           this.$refs.removidoComSucesso.open()
         }).onCancel(() => {
           this.$refs.naoRemovido.open()
         });
+      },
+      getPedidos(){
+        if(API.iniciado){
+          API.getPedidos().then(pedidos => {
+            grtfoodStoreController.updatePedidos(pedidos);
+            this.pedidos = grtfoodStoreController.getPedidos();
+          });
+        }
       }
     },
     computed:{
       quantidadeDePedidos(){
-        return this.pedidos.length
-      }
+        return grtfoodStoreController.getPedidos().length;
+      },
     },
     components:{
       'sweet-modal': SweetModal,
+    },
+    watch:{
+      quantidadeDePedidos(newValue){
+        this.getPedidos();
+      }      
     }
   }
 

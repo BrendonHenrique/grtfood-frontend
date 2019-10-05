@@ -13,8 +13,8 @@ export default class grtfoodController {
         return getters.getCardapio(state)
     }
     
-    static adicionarPedidos(payload){
-        mutations.adicionarPedidos(state,payload)
+    static updatePedidos(payload){
+        mutations.updatePedidos(state,payload)
     }
 
     static getPedidos(){

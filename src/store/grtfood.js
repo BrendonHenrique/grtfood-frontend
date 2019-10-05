@@ -8,8 +8,8 @@ const state = {
     updateCardapio(state, payload){
       Object.assign(state.cardapio, payload) 
     },
-    adicionarPedidos(state, payload){
-      state.pedidos.push(payload) 
+    updatePedidos(state, payload){
+      state.pedidos = [...payload] 
     },
     updatePossibilidadeDeFazerPedidos(state, payload){
       if(payload == 'Aberto'){
@@ -24,12 +24,12 @@ const state = {
     updateCardapio({commit}, payload){
       commit('updateCardapio', payload);
     },
-    adicionarPedidos({commit}, payload){
-      commit('adicionarPedidos', payload);
+    updatePedidos({commit}, payload){
+      commit('updatePedidos', payload);
     },
     updatePossibilidadeDeFazerPedidos({commit}, payload){
       commit('updatePossibilidadeDeFazerPedidos', payload);
-    }
+    },
   }
   
   const getters = {

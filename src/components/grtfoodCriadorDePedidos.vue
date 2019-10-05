@@ -172,6 +172,7 @@
         }
         // Enviando o pedido para o backend 
         API.connect().then((api) => {
+          
           api.createPedido({
             userId: this.usuarioSelecionado.value.id,
             items: this.pedidoItemsGroup,
@@ -180,13 +181,8 @@
             },
             obs: this.observacao
           }).then((response) => {
-            grtfoodStoreController.adicionarPedidos({
-              usuario: this.usuarioSelecionado,
-              items: this.pedidoItemsGroup,
-              multiplos: {
-                [multiplosNameSelected]: this.pedidoMultiplosGroup[0]
-              },
-              obs: this.observacao
+            api.getPedidos().then(pedidos => {
+              grtfoodStoreController.updatePedidos(pedidos)
             });
             this.$refs.sucessModal.open()
           });

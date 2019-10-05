@@ -15,7 +15,6 @@ class Api {
         this.iniciado = iniciado;
         this.jrpc = jrpc;
         this.socket = socket;
-
     }
 
     connect(){
@@ -52,7 +51,6 @@ class Api {
     }
 
     createPedido(payload){
-        
         const { userId, items, multiplos, obs  } = payload 
         return this.jrpc.call('createPedido',
         {
@@ -67,7 +65,10 @@ class Api {
 
     removerPedido(payload){
         console.log(payload)
-        
+    }
+
+    getPedidos(){
+        return this.jrpc.call('getPedidos',[]);
     }
 
 
