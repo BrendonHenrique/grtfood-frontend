@@ -9,6 +9,12 @@ class Api {
 
         if (!socket && !jrpc) {
             jrpc = new simple_jsonrpc()
+
+            jrpc.dispatch('setEstadoCardapio', function (estado) {
+                //console.log(estado)
+                grtfoodStoreController.updatePossibilidadeDefazerPedidos(estado)
+            });
+
             socket = new WebSocket("ws://0.0.0.0:8081/websocket")
         }
 
@@ -35,9 +41,6 @@ class Api {
                 res(this);
             }
 
-            this.jrpc.on('setEstadoCardapio', function (response) {
-                grtfoodStoreController.updatePossibilidadeDefazerPedidos(response)
-            });
 
         });
     }
@@ -53,25 +56,25 @@ class Api {
         return this.jrpc.call('setCardapio', { novoCardapio: cardapio });
     }
 
-    createPedido(payload){
-        const { userId, items, multiplos, obs  } = payload 
+    createPedido(payload) {
+        const { userId, items, multiplos, obs } = payload
         return this.jrpc.call('createPedido',
-        {
-            "userId": userId,
-            "pedido": {
-                "items": items,
-                "multiplos": multiplos
-            },
-            "obs": obs
-        })
+            {
+                "userId": userId,
+                "pedido": {
+                    "items": items,
+                    "multiplos": multiplos
+                },
+                "obs": obs
+            })
     }
 
     removerPedido(pedidoId) {
-        return this.jrpc.call('deletePedido',pedidoId);
+        return this.jrpc.call('deletePedido', pedidoId);
     }
 
-    getPedidos(){
-        return this.jrpc.call('getPedidos',[]);
+    getPedidos() {
+        return this.jrpc.call('getPedidos', []);
     }
 
 
