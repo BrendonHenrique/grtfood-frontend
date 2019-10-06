@@ -1,10 +1,7 @@
 <template>
   <q-layout view="hHh lpR fFf">
-    
     <!-- Header -->
-    <grtfood-header>
-      Grt Food Manager
-    </grtfood-header>
+    <grtfood-header>Grt Food Manager</grtfood-header>
     <!--  -->
 
     <q-page-container>
@@ -27,9 +24,9 @@
               </q-item>
               <q-item>
                 <q-item-section>
-                  <q-input outlined v-model="item" label="Adicionar Item">
+                  <q-input outlined v-model="item" label="Adicionar Item" @keyup.enter="addItem">
                     <template v-slot:after>
-                      <q-btn round icon="add" @click="addItem()" />
+                      <q-btn round icon="add" @click="addItem" />
                     </template>
                   </q-input>
                 </q-item-section>
@@ -65,7 +62,12 @@
                 </q-item>
                 <q-item :inset-level="1" :key="multiplo">
                   <q-item-section>
-                    <q-input outlined v-model="subItem" label="Adicionar Subitem">
+                    <q-input
+                      outlined
+                      v-model="subItem"
+                      label="Adicionar Subitem"
+                      @keyup.enter="addSubItem(multiplo)"
+                    >
                       <template v-slot:after>
                         <q-btn round icon="add" @click="addSubItem(multiplo)" />
                       </template>
@@ -75,9 +77,14 @@
               </template>
               <q-item>
                 <q-item-section>
-                  <q-input outlined v-model="multiploTxt" label="Adicionar Item multiplo">
+                  <q-input
+                    outlined
+                    v-model="multiploTxt"
+                    label="Adicionar Item multiplo"
+                    @keyup.enter="addMultiplo"
+                  >
                     <template v-slot:after>
-                      <q-btn round icon="add" @click="addMultiplo()" />
+                      <q-btn round icon="add" @click="addMultiplo" />
                     </template>
                   </q-input>
                 </q-item-section>
@@ -93,7 +100,6 @@
         </q-card>
       </div>
     </q-page-container>
-
   </q-layout>
 </template>
 
@@ -111,11 +117,17 @@ export default {
   },
   mounted() {
     API.connect().then(api => {
-      api.getCardapio().then(cardapio => (this.cardapio = cardapio));
+      api
+        .getCardapio()
+        .then(
+          cardapio =>
+            (this.cardapio = cardapio ? cardapio : { items: [], multiplos: {} })
+        );
     });
   },
   methods: {
     addItem() {
+      if (!this.item) return;
       this.cardapio.items.push(this.item);
       this.item = "";
     },
@@ -124,6 +136,7 @@ export default {
       this.item = "";
     },
     addMultiplo() {
+      if (!this.multiploTxt) return;
       this.$set(this.cardapio.multiplos, this.multiploTxt, []);
       this.multiploTxt = "";
     },
@@ -131,6 +144,7 @@ export default {
       this.$delete(this.cardapio.multiplos, multiplo);
     },
     addSubItem(multiplo) {
+      if (!this.subItem) return;
       this.cardapio.multiplos[multiplo].push(this.subItem);
       this.subItem = "";
     },
@@ -143,11 +157,11 @@ export default {
       });
     }
   },
-  components:{
-    'grtfood-header': require('./Header').default
+  components: {
+    "grtfood-header": require("./Header").default
   }
 };
 </script>
 <style lang="stylus">
-  @import url('https://fonts.googleapis.com/css?family=Dosis|Vibes&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Dosis|Vibes&display=swap');
 </style>
