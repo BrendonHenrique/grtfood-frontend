@@ -10,7 +10,7 @@
     <template v-for="(valor , chave ) in cardapio.multiplos">
       <q-item clickable :key="chave">
         <q-btn class="full-width bg-primary" dense>
-          <span style="font-family: 'Dosis', sans-serif;font-size:25px;">
+          <span class="text-white" style="font-family: 'Dosis', sans-serif;font-size:25px;">
             {{chave}}
           </span>
         </q-btn>

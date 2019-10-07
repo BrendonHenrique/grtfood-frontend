@@ -2,7 +2,7 @@
   "name": "grtfood",
   "version": "0.0.1",
   "description": "A Quasar Framework app",
-  "productName": "Quasar App",
+  "productName": "GrtFood",
   "cordovaId": "org.cordova.quasar.app",
   "author": "brendon <bhssilva@inf.ufpel.edu.br>",
   "private": true,

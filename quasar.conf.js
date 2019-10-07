@@ -82,7 +82,14 @@ module.exports = function (ctx) {
     devServer: {
       // https: true,
       // port: 8080,
-      open: true // opens browser window automatically
+      open: true, // opens browser window automatically
+      proxy:{
+        '/websocket':{
+          target:'http://10.0.0.29:8082',
+          ws:true,
+          changeOrigin: true
+        }
+      }
     },
 
     // animations: 'all', // --- includes all animations

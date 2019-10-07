@@ -2,7 +2,7 @@
   <div>
     
     <!-- Menu de pedidos -->
-    <q-dialog v-model="fazerPedido" @show="resetaFormulario" persistent full-height>
+    <q-dialog v-model="fazerPedido" @show="resetaFormulario" persistent >
 
       <q-card style="width: 500px; max-width: 80vw;">
 
@@ -25,7 +25,7 @@
             <!-- select de nomes -->
             <q-select filled v-model="usuarioSelecionado" use-input input-debounce="0" clearable
             label="Informe seu nome" :options="opcoesDeNomes" @filter="filtrarNome" 
-            :rules="[ val => val || 'Selecione seu nome']" style="width: 450px">
+            style="width: 450px">
               <template v-slot:no-option>
                 <q-item>
                   <q-item-section class="text-grey">
@@ -49,17 +49,19 @@
             </div>
             <!--  -->
 
-            <q-banner class="bg-primary text-white q-mt-sm " dense>
+            <q-banner v-show="false" class="bg-primary text-white q-mt-sm " dense>
               Observações
             </q-banner>
 
-            <div style="width: 100%;">
+            <div v-show="false" style="width: 100%;">
               <q-input dense style="height:5rem;" v-model="observacao" filled type="textarea" />
             </div>
 
           <!-- botão para confirmar o pedido -->
           <q-card-actions align="right">
-            <q-btn label="Confirmar pedido" color="primary" type="submit" />
+            <q-btn label="Confirmar pedido" color="primary" 
+            :disable="submitIsDisabled"
+            type="submit" />
           </q-card-actions>
           <!--  -->
           
@@ -111,6 +113,7 @@
         pedidos: [],
         cardapio: {},
         observacao: '',
+        submitIsDisabled: true
       }
     },
     mounted() {
@@ -223,6 +226,15 @@
           const needle = val.toLowerCase()
           this.opcoesDeNomes = listaDeNomes.filter(v => v.label.toLowerCase().indexOf(needle) > -1)
         })
+      }
+    },
+    watch:{
+      usuarioSelecionado(newValue){
+        if(newValue){
+          this.submitIsDisabled = false
+        }else{
+          this.submitIsDisabled = true
+        }
       }
     },
     components: {
