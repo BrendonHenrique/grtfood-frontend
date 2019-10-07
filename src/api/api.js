@@ -3,11 +3,20 @@ import grtfoodStoreController from '../controllers/grtfoodStoreController'
 let socket;
 let jrpc;
 let iniciado = false;
-
+let ApiEstado = { "NAO_INCIALIZADO": 0, "INICIALIZADO": 1, "CONECTANDO": 2, "CONECTADO": 3, "ERRO": 4 }
+let callbackList = [];
 class Api {
+    static get estado() {
+        return this._estado ? this._estado : ApiEstado.NAO_INCIALIZADO;
+    }
+    static set estado(estado) {
+        this._estado = estado;
+    }
+
     constructor() {
 
-        if (!socket && !jrpc) {
+        if (Api.estado == ApiEstado.NAO_INCIALIZADO) {
+            Api.estado = ApiEstado.INICIALIZADO;
             jrpc = new simple_jsonrpc()
 
             jrpc.dispatch('setEstadoCardapio', function (estado) {
@@ -18,47 +27,51 @@ class Api {
             socket = new WebSocket("ws://0.0.0.0:8081/websocket")
         }
 
-        this.iniciado = iniciado;
-        this.jrpc = jrpc;
-        this.socket = socket;
     }
 
     connect() {
+        if (Api.estado == ApiEstado.CONECTADO) return Promise.resolve(this);
+        else if (Api.estado == ApiEstado.CONECTANDO) return new Promise((res, rej) => {
+            callbackList.push(() => {
+                res(this)
+            })
+        })
+        //se inicializado, conectar
         return new Promise((res, rej) => {
-
-            if (this.iniciado) {
-                res(this);
-                return;
-            }
-
-            this.socket.onmessage = event => this.jrpc.messageHandler(event.data);
-            this.jrpc.toStream = _msg => this.socket.send(_msg)
-            this.socket.onerror = error => this.onDisconnect()
-            this.socket.onclose = event => this.onDisconnect()
+            callbackList.push(() => {
+                res(this)
+            })
+            socket.onmessage = event => jrpc.messageHandler(event.data);
+            jrpc.toStream = _msg => socket.send(_msg)
             this.onDisconnect = () => rej()
-            this.socket.onopen = () => {
-                iniciado = this.iniciado = true;
-                res(this);
-            }
+            socket.onerror = error => this.onDisconnect()
+            socket.onclose = event => this.onDisconnect()
+            socket.onopen = () => {
+                Api.estado = ApiEstado.CONECTADO;
+                console.log("Conectou")
+                console.log(callbackList)
+                callbackList.forEach(cb => cb())
 
+            }
+            console.log("Conectou")
 
         });
     }
 
     getUsuarios() {
-        return this.jrpc.call('getUsuarios', []);
+        return jrpc.call('getUsuarios', []);
     }
 
     getCardapio() {
-        return this.jrpc.call('getCardapio', {});
+        return jrpc.call('getCardapio', {});
     }
     setCardapio(cardapio) {
-        return this.jrpc.call('setCardapio', { novoCardapio: cardapio });
+        return jrpc.call('setCardapio', { novoCardapio: cardapio });
     }
 
     createPedido(payload) {
         const { userId, items, multiplos, obs } = payload
-        return this.jrpc.call('createPedido',
+        return jrpc.call('createPedido',
             {
                 "userId": userId,
                 "pedido": {
@@ -70,11 +83,11 @@ class Api {
     }
 
     removerPedido(pedidoId) {
-        return this.jrpc.call('deletePedido', pedidoId);
+        return jrpc.call('deletePedido', pedidoId);
     }
 
     getPedidos() {
-        return this.jrpc.call('getPedidos', []);
+        return jrpc.call('getPedidos', []);
     }
 
 
