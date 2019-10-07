@@ -25,7 +25,7 @@ export default class grtfoodController {
         return getters.getPossibilidadeDeFazerPedidos()
     }
 
-    static updatePossibilidadeDefazerPedidos(){
+    static updatePossibilidadeDefazerPedidos(payload){
         mutations.updatePossibilidadeDeFazerPedidos(state, payload)
     }
 
