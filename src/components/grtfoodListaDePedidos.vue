@@ -2,16 +2,16 @@
   <!-- Lista de pedidos -->
   <q-page-container>
     <!-- Lista dos pedidos  -->
-    <q-page>
-      <q-card>
+    <q-page style="display:flex">
+      <q-card style="width: 100%;display:flex; flex-direction:column">
         <q-banner class="bg-primary text-white text-h5">
           <span
             style="font-family:'Dosis';font-size:22px;"
           >Total de pedidos realizados até o momento - {{quantidadeDePedidos}}</span>
         </q-banner>
 
-        <div>
-          <q-scroll-area style="height: 100vh; width: 100%;">
+        <q-card-section style="flex-grow: 1">
+          <q-scroll-area style="height:100%;width: 100%;">
             <q-list
               dense
               bordered
@@ -30,7 +30,7 @@
               </q-item>
             </q-list>
           </q-scroll-area>
-        </div>
+        </q-card-section>
       </q-card>
     </q-page>
     <!--  -->
