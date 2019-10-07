@@ -3,92 +3,104 @@ import grtfoodStoreController from '../controllers/grtfoodStoreController'
 let socket;
 let jrpc;
 let iniciado = false;
-let ApiEstado = { "NAO_INCIALIZADO": 0, "INICIALIZADO": 1, "CONECTANDO": 2, "CONECTADO": 3, "ERRO": 4 }
+let ApiEstado = {
+  "NAO_INCIALIZADO": 0,
+  "INICIALIZADO": 1,
+  "CONECTANDO": 2,
+  "CONECTADO": 3,
+  "ERRO": 4
+}
 let callbackList = [];
 class Api {
-    static get estado() {
-        return this._estado ? this._estado : ApiEstado.NAO_INCIALIZADO;
-    }
-    static set estado(estado) {
-        this._estado = estado;
-    }
+  static get estado() {
+    return this._estado ? this._estado : ApiEstado.NAO_INCIALIZADO;
+  }
+  static set estado(estado) {
+    this._estado = estado;
+  }
 
-    constructor() {
+  constructor() {
 
-        if (Api.estado == ApiEstado.NAO_INCIALIZADO) {
-            Api.estado = ApiEstado.INICIALIZADO;
-            jrpc = new simple_jsonrpc()
+    if (Api.estado == ApiEstado.NAO_INCIALIZADO) {
+      Api.estado = ApiEstado.INICIALIZADO;
+      jrpc = new simple_jsonrpc()
 
-            jrpc.dispatch('setEstadoCardapio', function (estado) {
-                //console.log(estado)
-                grtfoodStoreController.updatePossibilidadeDefazerPedidos(estado)
-            });
+      jrpc.dispatch('setEstadoCardapio', function (estado) {
+        //console.log(estado)
+        grtfoodStoreController.updatePossibilidadeDefazerPedidos(estado)
+      });
 
-            socket = new WebSocket("ws://0.0.0.0:8081/websocket")
-        }
-
+      socket = new WebSocket("ws://localhost:8081/websocket")
     }
 
-    connect() {
-        if (Api.estado == ApiEstado.CONECTADO) return Promise.resolve(this);
-        else if (Api.estado == ApiEstado.CONECTANDO) return new Promise((res, rej) => {
-            callbackList.push(() => {
-                res(this)
-            })
-        })
-        //se inicializado, conectar
-        return new Promise((res, rej) => {
-            callbackList.push(() => {
-                res(this)
-            })
-            socket.onmessage = event => jrpc.messageHandler(event.data);
-            jrpc.toStream = _msg => socket.send(_msg)
-            this.onDisconnect = () => rej()
-            socket.onerror = error => this.onDisconnect()
-            socket.onclose = event => this.onDisconnect()
-            socket.onopen = () => {
-                Api.estado = ApiEstado.CONECTADO;
-                console.log("Conectou")
-                console.log(callbackList)
-                callbackList.forEach(cb => cb())
+  }
 
-            }
-            console.log("Conectou")
+  connect() {
+    if (Api.estado == ApiEstado.CONECTADO) return Promise.resolve(this);
+    else if (Api.estado == ApiEstado.CONECTANDO) return new Promise((res, rej) => {
+      callbackList.push(() => {
+        res(this)
+      })
+    })
+    //se inicializado, conectar
+    return new Promise((res, rej) => {
+      callbackList.push(() => {
+        res(this)
+      })
+      socket.onmessage = event => jrpc.messageHandler(event.data);
+      jrpc.toStream = _msg => socket.send(_msg)
+      this.onDisconnect = () => rej()
+      socket.onerror = error => this.onDisconnect()
+      socket.onclose = event => this.onDisconnect()
+      socket.onopen = () => {
+        Api.estado = ApiEstado.CONECTADO;
+        console.log("Conectou")
+        console.log(callbackList)
+        callbackList.forEach(cb => cb())
 
-        });
-    }
+      }
+      console.log("Conectou")
 
-    getUsuarios() {
-        return jrpc.call('getUsuarios', []);
-    }
+    });
+  }
 
-    getCardapio() {
-        return jrpc.call('getCardapio', {});
-    }
-    setCardapio(cardapio) {
-        return jrpc.call('setCardapio', { novoCardapio: cardapio });
-    }
+  getUsuarios() {
+    return jrpc.call('getUsuarios', []);
+  }
 
-    createPedido(payload) {
-        const { userId, items, multiplos, obs } = payload
-        return jrpc.call('createPedido',
-            {
-                "userId": userId,
-                "pedido": {
-                    "items": items,
-                    "multiplos": multiplos
-                },
-                "obs": obs
-            })
-    }
+  getCardapio() {
+    return jrpc.call('getCardapio', {});
+  }
+  setCardapio(cardapio) {
+    return jrpc.call('setCardapio', {
+      novoCardapio: cardapio
+    });
+  }
 
-    removerPedido(pedidoId) {
-        return jrpc.call('deletePedido', pedidoId);
-    }
+  createPedido(payload) {
+    const {
+      userId,
+      items,
+      multiplos,
+      obs
+    } = payload
+    return jrpc.call('createPedido', {
+      "userId": userId,
+      "pedido": {
+        "items": items,
+        "multiplos": multiplos
+      },
+      "obs": obs
+    })
+  }
 
-    getPedidos() {
-        return jrpc.call('getPedidos', []);
-    }
+  removerPedido(pedidoId) {
+    return jrpc.call('deletePedido', pedidoId);
+  }
+
+  getPedidos() {
+    return jrpc.call('getPedidos', []);
+  }
 
 
 }
