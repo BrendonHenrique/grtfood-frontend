@@ -133,23 +133,24 @@ export default {
           persistent: true
         })
         .onOk(() => {
-          if (API.iniciado) {
-            API.removerPedido(this.pedidoSelecionado.id).then(() => {
+          API.connect().then(api =>
+            api.removerPedido(this.pedidoSelecionado.id).then(() => {
               this.$refs.removidoComSucesso.open();
-            });
-          }
+              this.getPedidos();
+            })
+          );
         })
         .onCancel(() => {
           this.$refs.naoRemovido.open();
         });
     },
     getPedidos() {
-      API.connect()
-        .getPedidos()
-        .then(pedidos => {
+      API.connect().then(api => {
+        api.getPedidos().then(pedidos => {
           grtfoodStoreController.updatePedidos(pedidos);
           this.pedidos = grtfoodStoreController.getPedidos();
         });
+      });
     }
   },
   computed: {

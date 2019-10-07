@@ -42,9 +42,11 @@ class Api {
         res(this)
       })
     })
+    Api.estado = ApiEstado.CONECTANDO;
     //se inicializado, conectar
     return new Promise((res, rej) => {
       callbackList.push(() => {
+        console.log("resolveu")
         res(this)
       })
       socket.onmessage = event => jrpc.messageHandler(event.data);
@@ -59,7 +61,7 @@ class Api {
         callbackList.forEach(cb => cb())
 
       }
-      console.log("Conectou")
+      console.log("Conectando")
 
     });
   }
@@ -95,7 +97,7 @@ class Api {
   }
 
   removerPedido(pedidoId) {
-    return jrpc.call('deletePedido', pedidoId);
+    return jrpc.call('deletePedido', [pedidoId]);
   }
 
   getPedidos() {
