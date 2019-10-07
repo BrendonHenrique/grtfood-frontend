@@ -30,7 +30,7 @@ class Api {
         grtfoodStoreController.updatePossibilidadeDefazerPedidos(estado)
       });
 
-      socket = new WebSocket("ws://localhost:8081/websocket")
+      socket = new WebSocket(`ws://${window.location.host}/websocket`)
     }
 
   }
