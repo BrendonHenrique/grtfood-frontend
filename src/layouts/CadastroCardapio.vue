@@ -112,17 +112,16 @@ export default {
       item: "",
       multiploTxt: "",
       subItem: "",
-      cardapio: {}
+      cardapio: { items: [], multiplos: {} }
     };
   },
   mounted() {
     API.connect().then(api => {
-      api
-        .getCardapio()
-        .then(
-          cardapio =>
-            (this.cardapio = cardapio ? cardapio : { items: [], multiplos: {} })
-        );
+      api.getCardapio().then(cardapio => {
+        if (cardapio) {
+          this.cardapio = cardapio;
+        }
+      });
     });
   },
   methods: {
