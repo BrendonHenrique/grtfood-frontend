@@ -4,7 +4,9 @@
   </div>
 </template>
 
-<script>
+<script> 
+import Vue from 'vue';
+Vue.prototype.$eventBus = new Vue();  
 export default {
   name: 'App',
 }

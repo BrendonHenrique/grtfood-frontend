@@ -16,10 +16,9 @@
           @click="fazerPedido = true" />
         </div>
       <!--  -->
-
+   
     </q-drawer>
     <!--  -->
-    
     <!-- Dialog para inserir o pedido  -->
     <grtfood-criador-de-pedidos :fazerPedido="fazerPedido" @updateFazerPedido="updateFazerPedido" />
     <!--  -->
@@ -40,10 +39,10 @@
         childLeftDrawerOpen: this.leftDrawerOpen
       }
     },
-    mounted() {
+    created() { 
       this.getCardapios()
     },
-    methods: {
+    methods: { 
       updateFazerPedido(event){
         this.fazerPedido = event;
       },
@@ -55,7 +54,7 @@
           })
         });
       }
-    },
+    }, 
     components:{
       'grtfood-criador-de-pedidos': require('./grtfoodCriadorDePedidos').default,
       'grtfood-menu-de-opcoes': require('./grtfoodMenuDeOpcoes').default,
@@ -64,12 +63,7 @@
     watch:{
       leftDrawerOpen(newValue){
         this.childLeftDrawerOpen = newValue
-      }
+      },
     }
   }
-
-</script>
-
-<style>
-
-</style>
+</script> 

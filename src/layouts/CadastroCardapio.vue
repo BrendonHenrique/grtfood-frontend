@@ -97,14 +97,28 @@
           <q-card-actions>
             <q-btn class="bg-primary text-white" @click="atualizarCardapio">Criar/Atualizar Cardapio</q-btn>
           </q-card-actions>
+
         </q-card>
       </div>
     </q-page-container>
+
+    <!-- modal de aviso -->
+    <sweet-modal icon="success" ref="setCardapioModalSuccess">
+      Cardapio atualizado!
+    </sweet-modal>
+    <sweet-modal icon="warning" ref="setCardapioModalWarning">
+      Cardapio não atualizado!
+    </sweet-modal>
+    <!--  -->
   </q-layout>
 </template>
 
 <script>
+import {
+  SweetModal
+} from 'sweet-modal-vue';
 import API from "../api/api";
+import grtfoodStoreController from '../controllers/grtfoodStoreController.js';
 export default {
   data() {
     return {
@@ -119,12 +133,13 @@ export default {
     API.connect().then(api => {
       api.getCardapio().then(cardapio => {
         if (cardapio) {
+          grtfoodStoreController.updateCardapio(cardapio)
           this.cardapio = cardapio;
         }
       });
     });
   },
-  methods: {
+  methods: { 
     addItem() {
       if (!this.item) return;
       this.cardapio.items.push(this.item);
@@ -136,7 +151,7 @@ export default {
     },
     addMultiplo() {
       if (!this.multiploTxt) return;
-      this.$set(this.cardapio.multiplos, this.multiploTxt, []);
+      this.$set(this.cardapio.multiplos, this.multiplosetCardapioModalTxt, []);
       this.multiploTxt = "";
     },
     removeMultiplo(multiplo) {
@@ -152,11 +167,17 @@ export default {
     },
     atualizarCardapio() {
       API.connect().then(api => {
-        api.setCardapio(this.cardapio);
+        api.setCardapio(this.cardapio).then( () => {
+          grtfoodStoreController.updateCardapio(this.cardapio);
+          this.$refs.setCardapioModalSuccess.open();
+        }).catch( (error) => {
+          this.$refs.setCardapioModalWarning.open();
+        });
       });
     }
   },
   components: {
+    'sweet-modal': SweetModal,
     "grtfood-header": require("./Header").default
   }
 };
