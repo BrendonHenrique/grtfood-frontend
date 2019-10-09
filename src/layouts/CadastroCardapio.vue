@@ -7,12 +7,17 @@
     <q-page-container>
       <div class="container">
         <q-card class="my-card">
+          
+          <!-- sub headers -->
           <q-card-section>
             <div class="text-h6">Cardápio do dia</div>
             <div class="text-subtitle2">o que vamos comer hoje?</div>
           </q-card-section>
+          <!--  -->
 
           <q-card-section>
+
+            <!-- Items -->
             <q-list class>
               <q-item tag="label" v-ripple v-for="(item,idx) in cardapio.items" :key="item">
                 <q-item-section>
@@ -32,6 +37,9 @@
                 </q-item-section>
               </q-item>
             </q-list>
+            <!--  -->
+
+            <!-- Multiplos -->
             <q-list class>
               <template v-for="( opcoes,multiplo) in cardapio.multiplos">
                 <q-item tag="label" v-ripple :key="multiplo+'add'">
@@ -47,6 +55,7 @@
                     />
                   </q-item-section>
                 </q-item>
+
                 <q-item tag="label" v-ripple v-for="(op,idx) in opcoes" :inset-level="1" :key="op">
                   <q-item-section>
                     <q-item-label>{{op}}</q-item-label>
@@ -60,6 +69,7 @@
                     />
                   </q-item-section>
                 </q-item>
+
                 <q-item :inset-level="1" :key="multiplo">
                   <q-item-section>
                     <q-input
@@ -74,7 +84,9 @@
                     </q-input>
                   </q-item-section>
                 </q-item>
+
               </template>
+
               <q-item>
                 <q-item-section>
                   <q-input
@@ -90,13 +102,17 @@
                 </q-item-section>
               </q-item>
             </q-list>
+            <!--  -->
+
           </q-card-section>
 
           <q-separator dark />
 
+          <!-- botão para envio -->
           <q-card-actions>
             <q-btn class="bg-primary text-white" @click="atualizarCardapio">Criar/Atualizar Cardapio</q-btn>
           </q-card-actions>
+          <!--  -->
 
         </q-card>
       </div>
@@ -150,8 +166,7 @@ export default {
       this.item = "";
     },
     addMultiplo() {
-      if (!this.multiploTxt) return;
-      this.$set(this.cardapio.multiplos, this.multiplosetCardapioModalTxt, []);
+      this.$set(this.cardapio.multiplos, this.multiploTxt, []);
       this.multiploTxt = "";
     },
     removeMultiplo(multiplo) {

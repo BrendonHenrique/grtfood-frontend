@@ -2,14 +2,14 @@
   <div>
     
     <!-- Menu de pedidos -->
-    <q-dialog v-model="fazerPedido" @show="resetaFormulario" persistent >
+    <q-dialog v-model="fazerPedido" @show="resetaFormulario" @hide="resetaFormulario" persistent >
 
-      <q-card style="width: 500px; max-width: 80vw;">
+      <q-card style="width: 700px; max-width: 80vw;height:100vh;">
 
         <!-- Header do menu -->
         <q-card-section>
           <div class="row">
-            <span class="text-h6">
+            <span class="text-h5">
               Faça seu pedido
             </span>
             <q-space />
@@ -21,11 +21,11 @@
         <!-- Conteudo do dialog para criar pedido -->
         <q-form  @submit="confirmarPedido">
           
-          <q-card-section>
+          <q-card-section style="display:flex;justify-content:center;">
             <!-- select de nomes -->
             <q-select filled v-model="usuarioSelecionado" use-input input-debounce="0" clearable
-            label="Informe seu nome" :options="opcoesDeNomes" @filter="filtrarNome" 
-            style="width: 450px">
+            label="Informe seu nome" class="text-grey-7" :options="opcoesDeNomes" @filter="filtrarNome" 
+            style="width: 600px;font-size:20px;">
               <template v-slot:no-option>
                 <q-item>
                   <q-item-section class="text-grey">
@@ -35,9 +35,13 @@
               </template>
             </q-select>
             <!--  -->
+          </q-card-section>
 
+          <q-card-section class="q-ml-lg">
             <!-- Check box  -->
-            <q-option-group v-model="pedidoItemsGroup" :options="itemsOptions" color="green" type="checkbox" />
+            <q-option-group v-model="pedidoItemsGroup" 
+            :options="itemsOptions" color="green" type="checkbox"
+            />
             <!--  -->
 
             <!-- Options -->
@@ -56,16 +60,16 @@
             <div v-show="false" style="width: 100%;">
               <q-input dense style="height:5rem;" v-model="observacao" filled type="textarea" />
             </div>
-
+          </q-card-section>
+            
           <!-- botão para confirmar o pedido -->
           <q-card-actions align="right">
             <q-btn label="Confirmar pedido" color="primary" 
-            :disable="submitIsDisabled"
+            :disable="submitIsDisabled" size="20px"
             type="submit" />
           </q-card-actions>
           <!--  -->
           
-          </q-card-section>
 
         </q-form>
         <!--  -->
@@ -113,7 +117,8 @@
         pedidos: [],
         cardapio: {},
         observacao: '',
-        submitIsDisabled: true
+        submitIsDisabled: true,
+        usuarioSelecionadoAux:{}
       }
     },
     mounted() {
@@ -126,6 +131,7 @@
         this.multiplosOptionsGroup = [];
         this.itemsOptions = [];
         this.observacao = ''
+        this.usuarioSelecionado = {}
 
         API.connect().then((api) => {
 
@@ -165,23 +171,24 @@
       },
       enviaPedido() {
         // garantindo possibilidade de mais uma chave em multiplos
-        var multiplosNameSelected = null
+        var multiplosSelected = {}
         for (name in this.cardapio.multiplos) {
           this.cardapio.multiplos[name].forEach(option => {
-            if (option == this.pedidoMultiplosGroup[0]) {
-              multiplosNameSelected = name
-            }
-          })
+            this.pedidoMultiplosGroup.forEach(multiplosEscolhidos => { 
+              if(option == multiplosEscolhidos){
+                Object.assign(multiplosSelected,{
+                  [name]:multiplosEscolhidos
+                });
+              }
+            });
+          });
         }
         // Enviando o pedido para o backend 
         API.connect().then((api) => {
-          
           api.createPedido({
-            userId: this.usuarioSelecionado.value.id,
+            userId: this.usuarioSelecionadoAux.value.id,
             items: this.pedidoItemsGroup,
-            multiplos: {
-              [multiplosNameSelected]: this.pedidoMultiplosGroup[0]
-            },
+            multiplos: multiplosSelected,
             obs: this.observacao
           }).then((response) => {
             api.getPedidos().then(pedidos => {
@@ -210,7 +217,6 @@
         }).onDismiss(() => {
           setTimeout(() => {
             this.resetaFormulario();
-            this.usuarioSelecionado = {}
           }, 2000);
         })
       },
@@ -230,10 +236,11 @@
     },
     watch:{
       usuarioSelecionado(newValue){
+        Object.assign(this.usuarioSelecionadoAux, newValue);
         if(newValue){
-          this.submitIsDisabled = false
+          this.submitIsDisabled = false;
         }else{
-          this.submitIsDisabled = true
+          this.submitIsDisabled = true;
         }
       }
     },
@@ -242,3 +249,14 @@
     }
   }
 </script>
+
+
+<style lang="stylus">
+  .q-checkbox__label
+    font-size 22px
+  .q-checkbox__inner
+    height 50px
+    width 50px
+  .q-field__label
+    font-size 25px
+</style>
