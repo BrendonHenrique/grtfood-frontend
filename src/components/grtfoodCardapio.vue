@@ -12,12 +12,12 @@
       content-class="bg-grey-2"
     >
       <grtfood-cardapio-header />
-      <grtfood-menu-de-opcoes :cardapio="cardapio" style="padding-bottom:4rem" />
+      <grtfood-menu-de-opcoes style="padding-bottom:4rem" />
       <!-- Trigger que abre dialog para realizar pedido -->
       <div class="fixed-bottom">
         <q-btn
           label="Pedir"
-          v-if="possivelFazerPedidos"
+          v-if="getPossibilidadeDeFazerPedidos"
           class="full-width text-grey-9 bg-grey-4 text-h5 text-thin"
           @click="fazerPedido = true"
         />
@@ -39,13 +39,12 @@
 <script>
 import API from "../api/api";
 import grtfoodStoreController from "../controllers/grtfoodStoreController";
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 
 export default {
   props: ["leftDrawerOpen"],
   data() {
     return {
-      cardapio: {},
       fazerPedido: false,
       childLeftDrawerOpen: this.leftDrawerOpen
     };
@@ -54,7 +53,10 @@ export default {
     this.getCardapios();
   },
   computed: {
-    ...mapState(["possivelFazerPedidos"])
+    ...mapGetters({
+      getCardapio: "grtfood/getCardapio",
+      getPossibilidadeDeFazerPedidos: "grtfood/getPossibilidadeDeFazerPedidos"
+    })
   },
   methods: {
     updateFazerPedido(event) {
@@ -63,8 +65,7 @@ export default {
     getCardapios() {
       API.connect().then(api => {
         api.getCardapio().then(cardapio => {
-          grtfoodStoreController.updateCardapio(cardapio);
-          this.cardapio = grtfoodStoreController.getCardapio();
+          this.$store.commit("grtfood/updateCardapio", cardapio);
         });
       });
     }

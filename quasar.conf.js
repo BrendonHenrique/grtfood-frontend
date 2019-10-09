@@ -59,7 +59,7 @@ module.exports = function (ctx) {
         'Dialog'
       ]
     },
-    
+
     // https://quasar.dev/quasar-cli/cli-documentation/supporting-ie
     supportIE: false,
 
@@ -74,8 +74,7 @@ module.exports = function (ctx) {
       // extractCSS: false,
 
       // https://quasar.dev/quasar-cli/cli-documentation/handling-webpack
-      extendWebpack (cfg) {
-      }
+      extendWebpack(cfg) {}
     },
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-devServer
@@ -83,10 +82,10 @@ module.exports = function (ctx) {
       // https: true,
       // port: 8080,
       open: true, // opens browser window automatically
-      proxy:{
-        '/websocket':{
-          target:'http://10.0.0.29:8082',
-          ws:true,
+      proxy: {
+        '/websocket': {
+          target: 'http://10.0.0.29:8082',
+          ws: true,
           changeOrigin: true
         }
       }
@@ -113,8 +112,7 @@ module.exports = function (ctx) {
         orientation: 'portrait',
         background_color: '#ffffff',
         theme_color: '#027be3',
-        icons: [
-          {
+        icons: [{
             'src': 'statics/icons/icon-128x128.png',
             'sizes': '128x128',
             'type': 'image/png'
@@ -153,7 +151,7 @@ module.exports = function (ctx) {
     electron: {
       // bundler: 'builder', // or 'packager'
 
-      extendWebpack (cfg) {
+      extendWebpack(cfg) {
         // do something with Electron main process Webpack cfg
         // chainWebpack also available besides this extendWebpack
       },

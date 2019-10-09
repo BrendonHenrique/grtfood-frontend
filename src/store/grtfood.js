@@ -1,15 +1,16 @@
 const state = {
   cardapio: {},
   pedidos: [],
-  possivelFazerPedidos: false,
+  possivelFazerPedidos: true,
+  teste: ""
 }
 
 const mutations = {
   updateCardapio(state, payload) {
-    Object.assign(state.cardapio, payload)
+    state.cardapio = payload
   },
   updatePedidos(state, payload) {
-    state.pedidos = [...payload]
+    state.pedidos = payload
   },
   updatePossibilidadeDeFazerPedidos(state, payload) {
     if (payload == 'Aberto') {

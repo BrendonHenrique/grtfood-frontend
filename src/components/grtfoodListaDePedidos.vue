@@ -7,11 +7,11 @@
         <q-banner class="bg-primary text-white text-h5">
           <span
             style="font-family:'Dosis';font-size:22px;"
-          >Total de pedidos realizados até o momento - {{quantidadeDePedidos}}</span>
+          >Total de pedidos realizados até o momento: {{quantidadeDePedidos}}</span>
         </q-banner>
 
         <q-card-section style="flex-grow: 1">
-          <q-scroll-area style="height: calc(100vh - 176px);width: 100%;">
+          <q-scroll-area style="height:100%" :content-style="{height: '400px',width: '100%'}">
             <q-list
               dense
               bordered

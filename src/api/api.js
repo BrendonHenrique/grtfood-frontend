@@ -25,10 +25,6 @@ class Api {
       Api.estado = ApiEstado.INICIALIZADO;
       jrpc = new simple_jsonrpc()
 
-      jrpc.dispatch('setEstadoCardapio', function (estado) {
-        //console.log(estado)
-        grtfoodStoreController.updatePossibilidadeDefazerPedidos(estado)
-      });
 
       socket = new WebSocket(`ws://${window.location.host}/websocket`)
     }
@@ -109,3 +105,6 @@ class Api {
 
 let api = new Api()
 export default api;
+export {
+  jrpc
+}

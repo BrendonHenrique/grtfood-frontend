@@ -101,7 +101,7 @@
 import API from "../api/api";
 
 import grtfoodStoreController from "../controllers/grtfoodStoreController";
-
+import { mapGetters } from "vuex";
 import { SweetModal } from "sweet-modal-vue";
 
 let listaDeNomes = [];
@@ -118,16 +118,41 @@ export default {
       pedidoItemsGroup: [],
       pedidoMultiplosGroup: [],
       pedidos: [],
-      cardapio: {},
       observacao: "",
       submitIsDisabled: true,
       usuarioSelecionadoAux: {}
     };
   },
   mounted() {
-    this.cardapio = grtfoodStoreController.getCardapio();
+    this.preparaCardapio();
   },
   methods: {
+    preparaCardapio() {
+      if (!this.cardapio.items) return;
+      console.log(JSON.stringify(this.cardapio));
+      this.cardapio.items.forEach(opcao => {
+        this.pedidoItemsGroup.push(opcao);
+        this.itemsOptions.push({
+          label: opcao,
+          value: opcao
+        });
+      });
+
+      for (let nome in this.cardapio.multiplos) {
+        let multiplosOption = {
+          nome,
+          options: []
+        };
+        this.pedidoMultiplosGroup.push(this.cardapio.multiplos[nome][0]);
+        this.cardapio.multiplos[nome].forEach(opcao => {
+          multiplosOption.options.push({
+            label: opcao,
+            value: opcao
+          });
+        });
+        this.multiplosOptionsGroup.push(multiplosOption);
+      }
+    },
     resetaFormulario() {
       this.pedidoItemsGroup = [];
       this.pedidoMultiplosGroup = [];
@@ -136,6 +161,7 @@ export default {
       this.observacao = "";
       this.usuarioSelecionado = {};
 
+      this.preparaCardapio();
       API.connect().then(api => {
         api.getUsuarios().then(usuarios => {
           this.usuarios = usuarios;
@@ -145,29 +171,6 @@ export default {
           }));
           this.opcoesDeNomes = listaDeNomes;
         });
-
-        this.cardapio.items.forEach(opcao => {
-          this.pedidoItemsGroup.push(opcao);
-          this.itemsOptions.push({
-            label: opcao,
-            value: opcao
-          });
-        });
-
-        for (let nome in this.cardapio.multiplos) {
-          let multiplosOption = {
-            nome,
-            options: []
-          };
-          this.pedidoMultiplosGroup.push(this.cardapio.multiplos[nome][0]);
-          this.cardapio.multiplos[nome].forEach(opcao => {
-            multiplosOption.options.push({
-              label: opcao,
-              value: opcao
-            });
-          });
-          this.multiplosOptionsGroup.push(multiplosOption);
-        }
       });
     },
     enviaPedido() {
@@ -248,6 +251,11 @@ export default {
         this.submitIsDisabled = true;
       }
     }
+  },
+  computed: {
+    ...mapGetters({
+      cardapio: "grtfood/getCardapio"
+    })
   },
   components: {
     "sweet-modal": SweetModal

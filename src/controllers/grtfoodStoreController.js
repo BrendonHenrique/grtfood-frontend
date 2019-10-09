@@ -1,32 +1,35 @@
+import store from '../store/grtfood'
 
-import store from '../store/grtfood' 
+const {
+  state,
+  getters,
+  mutations
+} = store;
+window.store = store;
+export default class grtfoodController {
 
-const {state,getters,mutations} = store; 
+  static updateCardapio(payload) {
+    mutations.updateCardapio(state, payload)
+  }
 
-export default class grtfoodController { 
+  static getCardapio() {
+    return getters.getCardapio(state)
+  }
 
-    static updateCardapio(payload){ 
-        mutations.updateCardapio(state,payload)
-    }
-    
-    static getCardapio(){
-        return getters.getCardapio(state)
-    }
-    
-    static updatePedidos(payload){
-        mutations.updatePedidos(state,payload)
-    }
+  static updatePedidos(payload) {
+    mutations.updatePedidos(state, payload)
+  }
 
-    static getPedidos(){
-        return getters.getPedidos(state)
-    }
+  static getPedidos() {
+    return getters.getPedidos(state)
+  }
 
-    static getPossibilidadeDeFazerPedidos(){
-        return getters.getPossibilidadeDeFazerPedidos()
-    }
+  static getPossibilidadeDeFazerPedidos() {
+    return getters.getPossibilidadeDeFazerPedidos()
+  }
 
-    static updatePossibilidadeDefazerPedidos(payload){
-        mutations.updatePossibilidadeDeFazerPedidos(state, payload)
-    }
+  static updatePossibilidadeDefazerPedidos(payload) {
+    mutations.updatePossibilidadeDeFazerPedidos(state, payload)
+  }
 
 }
