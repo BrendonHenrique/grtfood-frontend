@@ -249,14 +249,3 @@
     }
   }
 </script>
-
-
-<style lang="stylus">
-  .q-checkbox__label
-    font-size 22px
-  .q-checkbox__inner
-    height 50px
-    width 50px
-  .q-field__label
-    font-size 25px
-</style>
