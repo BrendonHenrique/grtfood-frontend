@@ -17,9 +17,15 @@
       <div class="fixed-bottom">
         <q-btn
           label="Pedir"
+          v-if="possivelFazerPedidos"
           class="full-width text-grey-9 bg-grey-4 text-h5 text-thin"
           @click="fazerPedido = true"
         />
+        <q-banner
+          v-else
+          rounded
+          class="bg-purple-8 text-subtitle1 text-white"
+        >Pedidos encerrados por hoje 😢</q-banner>
       </div>
       <!--  -->
     </q-drawer>
@@ -33,6 +39,7 @@
 <script>
 import API from "../api/api";
 import grtfoodStoreController from "../controllers/grtfoodStoreController";
+import { mapState } from "vuex";
 
 export default {
   props: ["leftDrawerOpen"],
@@ -45,6 +52,9 @@ export default {
   },
   created() {
     this.getCardapios();
+  },
+  computed: {
+    ...mapState(["possivelFazerPedidos"])
   },
   methods: {
     updateFazerPedido(event) {
