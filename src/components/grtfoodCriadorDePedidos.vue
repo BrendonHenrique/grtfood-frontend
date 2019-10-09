@@ -2,7 +2,7 @@
   <div>
     
     <!-- Menu de pedidos -->
-    <q-dialog v-model="fazerPedido" @show="resetaFormulario" @hide="resetaFormulario" persistent >
+    <q-dialog v-model="fazerPedido" @show="resetaFormulario" persistent >
 
       <q-card style="width: 700px; max-width: 80vw;height:100vh;">
 
@@ -25,7 +25,7 @@
             <!-- select de nomes -->
             <q-select filled v-model="usuarioSelecionado" use-input input-debounce="0" clearable
             label="Informe seu nome" class="text-grey-7" :options="opcoesDeNomes" @filter="filtrarNome" 
-            style="width: 600px;font-size:20px;">
+            style="width: 100%;font-size:20px;">
               <template v-slot:no-option>
                 <q-item>
                   <q-item-section class="text-grey">
@@ -65,7 +65,7 @@
           <!-- botão para confirmar o pedido -->
           <q-card-actions align="right">
             <q-btn label="Confirmar pedido" color="primary" 
-            :disable="submitIsDisabled" size="20px"
+            :disable="submitIsDisabled" size="16px"
             type="submit" />
           </q-card-actions>
           <!--  -->
@@ -118,7 +118,7 @@
         cardapio: {},
         observacao: '',
         submitIsDisabled: true,
-        usuarioSelecionadoAux:{}
+        usuarioSelecionadoAux:{},
       }
     },
     mounted() {
@@ -183,6 +183,7 @@
             });
           });
         }
+
         // Enviando o pedido para o backend 
         API.connect().then((api) => {
           api.createPedido({
@@ -190,7 +191,7 @@
             items: this.pedidoItemsGroup,
             multiplos: multiplosSelected,
             obs: this.observacao
-          }).then((response) => {
+          }).then((response) => { 
             api.getPedidos().then(pedidos => {
               grtfoodStoreController.updatePedidos(pedidos)
             });
@@ -214,10 +215,6 @@
           this.enviaPedido()
         }).onCancel(() => {
           this.$refs.warningModal.open()
-        }).onDismiss(() => {
-          setTimeout(() => {
-            this.resetaFormulario();
-          }, 2000);
         })
       },
       // Função para filtrargem do nome
@@ -242,7 +239,7 @@
         }else{
           this.submitIsDisabled = true;
         }
-      }
+      }, 
     },
     components: {
       'sweet-modal': SweetModal,
