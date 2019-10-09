@@ -7,14 +7,10 @@
     :width="250" content-class="bg-grey-2">
 
       <grtfood-cardapio-header />
-
       <grtfood-menu-de-opcoes :cardapio="cardapio" />
-
       <!-- Trigger que abre dialog para realizar pedido -->
-        <div class="fixed-bottom">
-          <q-btn label="Pedir" class="full-width text-grey-9 bg-grey-4 text-h5 text-thin " 
-          @click="fazerPedido = true" />
-        </div>
+      <q-btn label="Pedir" class="full-width text-grey-9 bg-grey-4 text-h5 text-thin " 
+      @click="fazerPedido = true" />
       <!--  -->
    
     </q-drawer>
