@@ -198,9 +198,9 @@ export default {
             obs: this.observacao
           })
           .then(response => {
-            api.getPedidos().then(pedidos => {
-              grtfoodStoreController.updatePedidos(pedidos);
-            });
+            // api.getPedidos().then(pedidos => {
+            //   grtfoodStoreController.updatePedidos(pedidos);
+            // });
             this.$refs.sucessModal.open();
           });
       });
