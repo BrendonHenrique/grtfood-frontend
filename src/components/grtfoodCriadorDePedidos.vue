@@ -54,7 +54,7 @@
               :key="multiplosOptions.nome"
             >
               <q-banner inline-actions class="text-white bg-primary">
-                {{multiplosOptions.nome}}
+                <span class="text-h5">{{multiplosOptions.nome}}</span>
                 <i style="float:right">Selecione um item!</i>
               </q-banner>
               <q-option-group
@@ -262,3 +262,12 @@ export default {
   }
 };
 </script>
+<style lang="stylus">
+.q-radio__label, .q-checkbox__label, .q-item__label {
+  font-size: 1.4rem;
+}
+
+.q-field__label {
+  font-size: 1.2rem;
+}
+</style>
