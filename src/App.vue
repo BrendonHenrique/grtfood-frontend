@@ -13,12 +13,11 @@ export default {
   created() {
     Api.connect().then(() => {
       jrpc.dispatch("view.updateEstadoCardapio", estado => {
-        //console.log(estado
+        console.log(estado)
         this.$store.commit("grtfood/updatePossibilidadeDeFazerPedidos", estado);
       });
       jrpc.dispatch("view.updateCardapio", cardapio => {
         //console.log(estado))
-        console.log("commitou");
         this.$store.commit("grtfood/updateCardapio", cardapio);
       });
       jrpc.dispatch("view.updatePedidos", pedidos => {

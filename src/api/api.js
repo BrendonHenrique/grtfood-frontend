@@ -24,11 +24,8 @@ class Api {
     if (Api.estado == ApiEstado.NAO_INCIALIZADO) {
       Api.estado = ApiEstado.INICIALIZADO;
       jrpc = new simple_jsonrpc()
-
-
       socket = new WebSocket(`ws://${window.location.host}/websocket`)
     }
-
   }
 
   connect() {

@@ -77,7 +77,7 @@
             <q-btn
               label="Confirmar pedido"
               color="primary"
-              :disable="submitIsDisabled"
+              :disable="isUserSelecionado"
               size="16px"
               type="submit"
             />
@@ -119,8 +119,7 @@ export default {
       pedidoMultiplosGroup: [],
       pedidos: [],
       observacao: "",
-      submitIsDisabled: true,
-      usuarioSelecionadoAux: {}
+      submitIsDisabled: true
     };
   },
   mounted() {
@@ -192,7 +191,7 @@ export default {
       API.connect().then(api => {
         api
           .createPedido({
-            userId: this.usuarioSelecionadoAux.value.id,
+            userId: this.usuarioSelecionado.value.id,
             items: this.pedidoItemsGroup,
             multiplos: multiplosSelected,
             obs: this.observacao
@@ -242,20 +241,18 @@ export default {
       });
     }
   },
-  watch: {
-    usuarioSelecionado(newValue) {
-      Object.assign(this.usuarioSelecionadoAux, newValue);
-      if (newValue) {
-        this.submitIsDisabled = false;
-      } else {
-        this.submitIsDisabled = true;
-      }
-    }
-  },
   computed: {
+  
     ...mapGetters({
       cardapio: "grtfood/getCardapio"
-    })
+    }),
+    isUserSelecionado(){
+      
+      if(!this.usuarioSelecionado || !this.usuarioSelecionado.value){
+        return true;
+      }
+      return false;
+    }
   },
   components: {
     "sweet-modal": SweetModal

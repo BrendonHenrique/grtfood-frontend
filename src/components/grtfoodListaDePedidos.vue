@@ -26,7 +26,7 @@
                   <span style="font-family: 'Dosis', sans-serif;font-size:25px;">{{pedido.usuario}}</span>
                 </q-item-section>
                 <q-space />
-                <q-btn round icon="delete" @click.stop="removerPedido(pedido)" />
+                <q-btn v-if="getPossibilidadeDeFazerPedidos" round icon="delete" @click.stop="removerPedido(pedido)" />
               </q-item>
             </q-list>
           </q-scroll-area>
@@ -92,6 +92,7 @@
 <script>
 import { SweetModal } from "sweet-modal-vue";
 import grtfoodStoreController from "../controllers/grtfoodStoreController";
+import { mapGetters } from "vuex";
 import API from "../api/api";
 
 export default {
@@ -156,7 +157,9 @@ export default {
   computed: {
     quantidadeDePedidos() {
       return grtfoodStoreController.getPedidos().length;
-    }
+    }, ...mapGetters({
+      getPossibilidadeDeFazerPedidos: "grtfood/getPossibilidadeDeFazerPedidos"
+    })
   },
   components: {
     "sweet-modal": SweetModal
